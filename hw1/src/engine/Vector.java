@@ -15,7 +15,7 @@ public class Vector {
   }
 
   public Vector sub(Vector other){
-    return new Vector(this.x - other.y, this.y - other.y);
+    return new Vector(this.x - other.x, this.y - other.y);
   }
 
   public Vector mul(double scalar){
@@ -33,8 +33,11 @@ public class Vector {
   public Vector norm(){
     double mag = this.magnitude();
 
-    return new Vector(this.x / mag, this.y / mag);
+    if (mag == 0){
+      return new Vector(0, 0);
+    }
 
+    return new Vector(this.x / mag, this.y / mag);
   }
 
   public Vector right(){

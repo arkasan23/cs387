@@ -28,35 +28,58 @@ public class SeekController extends Controller {
     
     public void update(Car subject, Game game, double delta_t, double[] controlVariables) {
 
+       
+        Vector forwardVec = new Vector (Math.cos(subject.getAngle()), Math.sin(subject.getAngle()));
+        Vector rightVec = forwardVec.right().norm();
+
         Vector targetPos = new Vector(target.getX(), target.getY());
         Vector carPos = new Vector(subject.getX(), subject.getY());
-        Vector rightVec = carPos.right().norm();
 
-        carPos.print();
-
-        System.out.println(targetPos.dot(rightVec));
-
+        Vector diff = targetPos.sub(carPos).norm();
       
+        double fowardDot = forwardVec.dot(diff);
+        double rightDot = rightVec.dot(diff);
 
-        
-        if (rightVec.dot(targetPos) == 0){
-          controlVariables[VARIABLE_STEERING] = 0;
-        }
-        else if (rightVec.dot(targetPos) > 0){
+
+        System.out.println(rightDot);
+      
+        if (rightDot > 0.15){
+          controlVariables[VARIABLE_STEERING] = -1;
+        } else if (rightDot < -0.15) {
           controlVariables[VARIABLE_STEERING] = 1;
         } else {
-          controlVariables[VARIABLE_STEERING] = -1;
+          controlVariables[VARIABLE_STEERING] = 0;
         }
 
-        if (carPos.dot(targetPos) > 0){
-          controlVariables[VARIABLE_THROTTLE] = 1;
+        
+
+
+
+
+        if (fowardDot > 0){
+         controlVariables[VARIABLE_THROTTLE] = 1;
           controlVariables[VARIABLE_BRAKE] = 0;
         } else {
-          controlVariables[VARIABLE_THROTTLE] = 0;
+        controlVariables[VARIABLE_THROTTLE] = 0;
           controlVariables[VARIABLE_BRAKE] = 1;
 
-
         }
+
+
+       
+/*
+      if (fowardDot == 0){
+        controlVariables[VARIABLE_THROTTLE] = 0;
+        controlVariables[VARIABLE_BRAKE] = 0;
+      } else if (fowardDot > 0) {
+        controlVariables[VARIABLE_THROTTLE] = 0;
+        controlVariables[VARIABLE_BRAKE] = 1;
+      } else {
+        controlVariables[VARIABLE_THROTTLE] = 1 ;
+        controlVariables[VARIABLE_BRAKE] = 0 ;
+      }
+    */
+      
         
     }
     
