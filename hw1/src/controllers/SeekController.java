@@ -1,8 +1,3 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package controllers;
 
 import engine.Car;
@@ -20,34 +15,30 @@ public class SeekController extends Controller {
     
     public void update(Car subject, Game game, double delta_t, double[] controlVariables) {
 
-        Vector forwardVec = new Vector (Math.cos(subject.getAngle()), Math.sin(subject.getAngle()));
+        Vector forwardVec = new Vector (Math.cos(subject.getAngle()), Math.sin(subject.getAngle())).norm();
         Vector rightVec = forwardVec.right().norm();
 
         Vector targetPos = new Vector(target.getX(), target.getY());
         Vector carPos = new Vector(subject.getX(), subject.getY());
 
-        Vector diff = targetPos.sub(carPos).norm();
+        Vector diff = targetPos.sub(carPos).norm().mul(150);
       
-        double fowardDot = forwardVec.dot(diff);
-        double rightDot = rightVec.dot(diff);
+        double fowardDot = forwardVec.dot(diff) / 150;
+        double rightDot = rightVec.dot(diff) / 150;
 
-      
-        if (rightDot > 0.15){
-          controlVariables[VARIABLE_STEERING] = -1;
-        } else if (rightDot < -0.15) {
-          controlVariables[VARIABLE_STEERING] = 1;
-        } else {
-          controlVariables[VARIABLE_STEERING] = 0;
-        }
+        controlVariables[VARIABLE_STEERING] = Math.clamp(-rightDot, -1.0, 1.0);
+
+        double throttle = 0;
+        double brake = 0;
 
         if (fowardDot > 0){
-         controlVariables[VARIABLE_THROTTLE] = 1;
-          controlVariables[VARIABLE_BRAKE] = 0;
+          throttle = Math.clamp(fowardDot, 0.0, 1.0);
         } else {
-        controlVariables[VARIABLE_THROTTLE] = 0;
-          controlVariables[VARIABLE_BRAKE] = 1;
-
+          brake = Math.clamp(-fowardDot, 0.0, 1.0);
         }
+
+        controlVariables[VARIABLE_THROTTLE] = throttle;
+        controlVariables[VARIABLE_BRAKE] = brake;
     }
     
 }
