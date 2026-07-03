@@ -16,24 +16,26 @@ import java.awt.Color;
  * @author santi
  */
 public class SeekScenario {
-    /*
-        Goal of this exercise:
-        - Write a controller for "car2" that uses the "Seek" steerig behavior to always run
-          after car1 (that is controlled using the arrow keys).
-    */
-    
-    public static void main(String args[]) throws Exception {
-        Game game = new Game(800,600, 25);
-        // set up the outside walls:
-        game.add(new Obstacle(0,0,800,25,Color.GRAY));
-        game.add(new Obstacle(0,575,800,25,Color.GRAY));
-        game.add(new Obstacle(0,0,25,600,Color.GRAY));
-        game.add(new Obstacle(775,0,25,600,Color.GRAY));
-        // set up the cars and markers:
-        GameObject marker = new MovingMarker(10, Color.green);
-        game.add(marker);
-        GameObject car = new Car("graphics/bluecar.png",400,100,Math.PI/2, new SeekController(marker));
-        game.add(car);
-        GameWindow.newWindow(game);
-    }
+  /*
+   * Goal of this exercise:
+   * - Write a controller for "car2" that uses the "Seek" steerig behavior to
+   * always run
+   * after car1 (that is controlled using the arrow keys).
+   */
+
+  public static void main(String args[]) throws Exception {
+    Game game = new Game(800, 600, 25);
+    // set up the outside walls:
+    game.add(new Obstacle(0, 0, 800, 25, Color.GRAY));
+    game.add(new Obstacle(0, 575, 800, 25, Color.GRAY));
+    game.add(new Obstacle(0, 0, 25, 600, Color.GRAY));
+    game.add(new Obstacle(775, 0, 25, 600, Color.GRAY));
+    // set up the cars and markers:
+    GameObject marker = new MovingMarker(10, Color.green);
+    game.add(marker);
+    // using seek steering behavior
+    GameObject car = new Car("graphics/bluecar.png", 400, 100, Math.PI / 2, new SeekController(marker));
+    game.add(car);
+    GameWindow.newWindow(game);
+  }
 }
