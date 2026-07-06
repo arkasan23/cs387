@@ -21,10 +21,10 @@ public class SeekController extends Controller {
   public boolean rayCast(Car subject, Game game, double angle) {
 
     double rads = subject.getAngle() + Math.toRadians(angle);
-    RotatedRectangle rect = new RotatedRectangle(subject.getX(), subject.getY(), 2,
-        10, rads);
+    RotatedRectangle rect = new RotatedRectangle(subject.getX(), subject.getY(), subject.m_img.getWidth() / 2,
+        subject.m_img.getHeight() / 2, rads);
 
-    int raySteps = 15;
+    int raySteps = 10;
     int stepSize = 5;
 
     double dirX = Math.cos(rads);
@@ -79,15 +79,16 @@ public class SeekController extends Controller {
 
     // Cast 4 rays at different angles
     boolean rightCast = rayCast(subject, game, 35);
-    boolean narrowRayCast = rayCast(subject, game, 10);
+    boolean narrowRayCast = rayCast(subject, game, 15);
     boolean leftCast = rayCast(subject, game, -35);
-    boolean narrowLeftCast = rayCast(subject, game, -10);
+    boolean narrowLeftCast = rayCast(subject, game, -15);
+
+    if (leftCast || narrowLeftCast) {
+      rightDot = -1.0;
+    }
 
     if (rightCast || narrowRayCast) {
       rightDot = 1.0;
-    }
-    if (leftCast || narrowLeftCast) {
-      rightDot = -1.0;
     }
 
     controlVariables[VARIABLE_STEERING] = Math.clamp(-rightDot, -1.0, 1.0);
