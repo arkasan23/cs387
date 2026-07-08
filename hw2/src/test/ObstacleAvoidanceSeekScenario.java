@@ -60,7 +60,8 @@ public class ObstacleAvoidanceSeekScenario {
 
     GameObject markerRandom = new MarkerRandom(10, Color.green);
     game.add(markerRandom);
-
+    // use the seek controller to move the car to the marker, but avoid obstacles
+    // along the way
     GameObject car = new Car("graphics/bluecar.png", 150, 750, -Math.PI / 2, new SeekController(markerRandom));
     game.add(car);
     GameWindow.newWindow(game);
