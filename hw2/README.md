@@ -15,11 +15,11 @@ For this project, I implemented obstacle avoidance for the seek behavior by addi
 
 make
 
-## SeekObstacleAvoidance Scenario
+## Run ObstacleAvoidanceSeekScenario
 
 make seek
 
-## Keyboard Scenario
+## Run Keyboard Scenario
 
 make keyboard
 
