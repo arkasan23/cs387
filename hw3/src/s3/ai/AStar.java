@@ -50,18 +50,51 @@ public class AStar {
     return neighbors;
   }
 
+  private boolean canMoveTo(double x, double y) {
+    int newX = (int) x;
+    int newY = (int) y;
+
+    if (newX < 0 || newY < 0 || newX >= game.getMap().getWidth() || newY >= game.getMap().getHeight()) {
+      return false;
+    }
+
+    int origalX = entity.getX();
+    int origalY = entity.getY();
+
+    entity.setX(newX);
+    entity.setY(newY);
+
+    boolean canMove = game.anyLevelCollision(entity) == null;
+    entity.setX(origalX);
+    entity.setY(origalY);
+
+    return canMove;
+  }
+
+  private Node findNodeInList(List<Node> list, double x, double y) {
+    for (Node node : list) {
+      if (node.x == x && node.y == y) {
+        return node;
+      }
+    }
+    return null;
+  }
+
   public List<Pair<Double, Double>> computePath() {
-    //
-    // System.out.println("A* pathfinding from (" + start_x + ", " + start_y + ") to
-    // (" + goal_x + ", " + goal_y + ")");
-    //
     ArrayList<Node> openList = new ArrayList<>();
     ArrayList<Node> closedList = new ArrayList<>();
-    int iteration = 0;
+
+    if (start_x == goal_x && start_y == goal_y) {
+      return new ArrayList<>();
+    }
+
+    if (!canMoveTo(goal_x, goal_y)) {
+      return null;
+    }
+
     openList.add(new Node(start_x, start_y, 0, huristic(start_x, start_y), null));
 
     while (openList.size() > 0) {
-      iteration++;
       Node currentNode = openList.get(0);
       for (Node node : openList) {
         if (node.f < currentNode.f) {
@@ -71,10 +104,14 @@ public class AStar {
 
       if (currentNode.x == goal_x && currentNode.y == goal_y) {
         List<Pair<Double, Double>> path = new ArrayList<>();
-        while (currentNode != null) {
-          path.add(0, new Pair<>(currentNode.x, currentNode.y));
-          currentNode = currentNode.parent;
+
+        List<Node> nodePath = currentNode.getPath();
+
+        for (int i = 1; i < nodePath.size(); i++) {
+          Node node = nodePath.get(i);
+          path.add(new Pair<>(node.x, node.y));
         }
+
         return path;
       }
 
@@ -86,26 +123,23 @@ public class AStar {
         double neighborX = neighbor.m_a;
         double neighborY = neighbor.m_b;
 
-        if (this.entity.isBlocked(neighborX, neighborY) || closedList.stream()
-            .anyMatch(n -> n.x == neighborX && n.y == neighborY)) {
+        if (!canMoveTo(neighborX, neighborY) || findNodeInList(closedList, neighborX, neighborY) != null) {
           continue;
         }
 
         double gCost = currentNode.g + 1;
         double hCost = huristic(neighborX, neighborY);
-        Node neighborNode = new Node(neighborX, neighborY, gCost, hCost, currentNode);
 
-        Node existingOpenNode = openList.stream()
-            .filter(n -> n.x == neighborX && n.y == neighborY)
-            .findFirst()
-            .orElse(null);
+        Node openNode = findNodeInList(openList, neighborX, neighborY);
 
-        if (existingOpenNode == null) {
-          openList.add(neighborNode);
-        } else if (gCost < existingOpenNode.g) {
-          existingOpenNode.g = gCost;
-          existingOpenNode.f = gCost + hCost;
-          existingOpenNode.parent = currentNode;
+        if (openNode == null) {
+          Node newNode = new Node(neighborX, neighborY, gCost, hCost, currentNode);
+          openList.add(newNode);
+        } else if (gCost < openNode.g) {
+          openNode.g = gCost;
+          openNode.h = hCost;
+          openNode.f = gCost + hCost;
+          openNode.parent = currentNode;
         }
       }
     }
