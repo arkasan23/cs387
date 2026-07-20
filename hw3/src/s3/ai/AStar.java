@@ -36,11 +36,13 @@ public class AStar {
 
   }
 
+  // manhattan distance heuristic
   private double huristic(double x, double y) {
     return Math.sqrt(Math.pow(x - goal_x, 2) + Math.pow(y - goal_y, 2));
   }
 
   private List<Pair<Double, Double>> getNeighbors(double x, double y) {
+    // get the negibors of the current cell
     List<Pair<Double, Double>> neighbors = new ArrayList<>();
     neighbors.add(new Pair<>(x + 1, y));
     neighbors.add(new Pair<>(x - 1, y));
@@ -51,9 +53,12 @@ public class AStar {
   }
 
   private boolean canMoveTo(double x, double y) {
+    // check if the unit can move to the cell without colliding with any other units
+    // or obstacles
     int newX = (int) x;
     int newY = (int) y;
 
+    // check if its in the map bounds
     if (newX < 0 || newY < 0 || newX >= game.getMap().getWidth() || newY >= game.getMap().getHeight()) {
       return false;
     }
@@ -61,9 +66,10 @@ public class AStar {
     int origalX = entity.getX();
     int origalY = entity.getY();
 
+    // move the unit to the new position and check for collisions and move it back
+    // to the original position
     entity.setX(newX);
     entity.setY(newY);
-
     boolean canMove = game.anyLevelCollision(entity) == null;
     entity.setX(origalX);
     entity.setY(origalY);
@@ -84,10 +90,12 @@ public class AStar {
     ArrayList<Node> openList = new ArrayList<>();
     ArrayList<Node> closedList = new ArrayList<>();
 
+    // check if the start and goal are the same, if so return an empty path
     if (start_x == goal_x && start_y == goal_y) {
       return new ArrayList<>();
     }
 
+    // check if the goal are valid positions, if not return null
     if (!canMoveTo(goal_x, goal_y)) {
       return null;
     }
@@ -96,29 +104,24 @@ public class AStar {
 
     while (openList.size() > 0) {
       Node currentNode = openList.get(0);
+      // get the node with the lowest f value from the open list
       for (Node node : openList) {
         if (node.f < currentNode.f) {
           currentNode = node;
         }
       }
 
+      // goal check
       if (currentNode.x == goal_x && currentNode.y == goal_y) {
-        List<Pair<Double, Double>> path = new ArrayList<>();
-
-        List<Node> nodePath = currentNode.getPath();
-
-        for (int i = 1; i < nodePath.size(); i++) {
-          Node node = nodePath.get(i);
-          path.add(new Pair<>(node.x, node.y));
-        }
-
-        return path;
+        return currentNode.getPath();
       }
 
       openList.remove(currentNode);
       closedList.add(currentNode);
 
       for (Pair<Double, Double> neighbor : getNeighbors(currentNode.x, currentNode.y)) {
+        // get the nehibors of the current node and check if they are valid positions to
+        // move to
 
         double neighborX = neighbor.m_a;
         double neighborY = neighbor.m_b;
@@ -132,6 +135,8 @@ public class AStar {
 
         Node openNode = findNodeInList(openList, neighborX, neighborY);
 
+        // if the neighbor is not in the open list, add it, otherwise check if the new g
+        // cost is lower than the old one and update it
         if (openNode == null) {
           Node newNode = new Node(neighborX, neighborY, gCost, hCost, currentNode);
           openList.add(newNode);
