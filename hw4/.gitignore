@@ -1,0 +1,13 @@
+.classpath
+.idea
+.metadata
+.project
+.settings
+/html
+/mario.jar
+bin
+build
+results
+out
+target
+*.iml

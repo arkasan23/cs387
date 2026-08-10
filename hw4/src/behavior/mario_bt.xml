@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<BehaviorTree>
+    <Selector name="MarioPrioritySelector">
+        <!-- avoid danger -->
+        <Sequence name="AvoidImmediateDanger">
+            <Condition name="DangerClose"/>
+            <Action name="AvoidDanger"/>
+        </Sequence>
+
+        <!-- dont fall -->
+        <Sequence name="ClearGap">
+            <Condition name="GapAhead"/>
+            <Action name="JumpGap"/>
+        </Sequence>
+
+        <!-- shoot enemys -->
+        <Sequence name="ShootAttack">
+            <Condition name="ShootableEnemyAhead"/>
+            <Condition name="CanShoot"/>
+            <Action name="ShootEnemy"/>
+        </Sequence>
+
+        <!-- stomp enemys -->
+        <Sequence name="StompAttack">
+            <Condition name="SquishyEnemyNearby"/>
+            <Action name="StompEnemy"/>
+        </Sequence>
+
+        <!-- get powerups -->
+        <Sequence name="GetPowerup">
+            <Condition name="CollectibleNearby"/>
+            <Action name="CollectPowerup"/>
+        </Sequence>
+
+        <!-- get coins -->
+        <Sequence name="GetCoin">
+            <Condition name="CoinNearby"/>
+            <Action name="CollectCoin"/>
+        </Sequence>
+
+        <!-- hit question blocks -->
+        <Sequence name="OpenQuestionBlock">
+            <Condition name="QuestionBrickNearby"/>
+            <Action name="HitQuestionBrick"/>
+        </Sequence>
+
+        <!-- jump obstacles -->
+        <Sequence name="ClearObstacle">
+            <Condition name="ObstacleAhead"/>
+            <Action name="JumpObstacle"/>
+        </Sequence>
+
+        <!-- keep jumping -->
+        <Sequence name="FinishJump">
+            <Condition name="IsJumping"/>
+            <Action name="ContinueJumpRight"/>
+        </Sequence>
+
+        <!-- run if safe -->
+        <Sequence name="SafeSprint">
+            <Condition name="SafeToSprint"/>
+            <Action name="SprintRight"/>
+        </Sequence>
+
+        <Action name="MoveRight"/>
+    </Selector>
+</BehaviorTree>
