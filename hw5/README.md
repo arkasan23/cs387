@@ -1,28 +1,32 @@
-# Steering Behaviors Project 1 Part 2
+# Project 2 Pathfinding
 
 Author: Arsalan Riaz
-07/07/2026
+07/21/2026
 
 ## Video
 
-[SeekObstacleAvoidance](https://www.dropbox.com/scl/fi/w3bnf9k8jzik8wd78xv8x/recording_2026-07-07_22.51.47.mp4?rlkey=mh9uh1842dj8kzjsyj1fv1o4b&st=g0jwv78f&dl=0)
+[Pathfinding Video](https://www.dropbox.com/scl/fi/pi44zrjy9c2zx8wupq2hn/recording_2026-07-20_15.15.20.mp4?rlkey=0qlm2y3j57m2e1ceayx9iks8c&st=c5jo9uw5&dl=0)
 
 ## Description
 
-For this project, I implemented obstacle avoidance for the seek behavior by adding a raycasting system. Instead of only steering directly toward the target marker, the controller projects multiple rays in front of the car at different angles to detect upcoming obstacles. Each ray moves a small rotated rectangle forward in steps and checks for collisions with the obstacles in the game. If an obstacle is detected, the controller adjusts the steering direction to avoid it while continuing to move toward the target whenever the path is clear.
+For this project, I implemented the A* pathfinding algorithm in the AStar class to allow units in the game to navigate around obstacles and reach their destinations. The algorithm uses open and closed lists, calculates movement and heuristic costs to determine the shortest path, and checks each possible move using the game's collision detection to avoid blocked tiles. Once the goal is reached, the path is reconstructed from the goal back to the start and returned in the correct order, excluding the starting position and including the goal. If no valid path exists, the algorithm returns null. I tested the implementation with both human controlled units and AI versus AI matches to ensure units could navigate the maps correctly.
 
 ## Compile
 
 make
 
-## Run ObstacleAvoidanceSeekScenario
+## Run Human Vs AI Scenario
 
-make seek
+make run
 
-## Run Keyboard Scenario
+## Run Archers AI vs Archers AI Scenario
 
-make keyboard
+make archers
 
-## Remove all compile files
+## Run Footmen AI vs Footmen AI Scenario
 
-make clean
+make footmen
+
+## Run Footmen AI vs Archers AI Scenario
+
+make ai

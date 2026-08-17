@@ -1,30 +1,40 @@
-JAVAC = javac
-JAVA = java
+JAVAC := javac
+JAVA := java
+SRC_DIR := src
+BUILD_DIR := build
+LIB_DIR := libs
+MAIN := s3.base.Main
 
-SRC = src
-OUT = out
+SOURCES := $(shell find $(SRC_DIR) -name '*.java')
+CLASSPATH := $(BUILD_DIR):$(LIB_DIR)/*
 
-SOURCES := $(shell find $(SRC) -name "*.java")
+.PHONY: all compile run clean
 
 all: compile
 
 compile:
-	@mkdir -p $(OUT)
-	$(JAVAC) -d $(OUT) $(SOURCES)
-
-keyboard: compile
-	$(JAVA) -cp $(OUT) test.KeyboardExample
-
-seek: compile
-	$(JAVA) -cp $(OUT) test.ObstacleAvoidanceSeekScenario
+	@mkdir -p $(BUILD_DIR)
+	$(JAVAC) -cp "$(LIB_DIR)/*" -d $(BUILD_DIR) $(SOURCES)
 
 run: compile
-ifndef CLASS
-	$(error Usage: make run CLASS=test.KeyboardExample)
-endif
-	$(JAVA) -cp $(OUT) $(CLASS)
+	$(JAVA) -cp "$(CLASSPATH)" $(MAIN)
+
+
+archers: compile
+	$(JAVA) -cp "$(CLASSPATH)" $(MAIN) \
+		-p "1|player1|ai-archers-rush" \
+		-p "1|player2|ai-archers-rush"
+
+footmen: compile
+	$(JAVA) -cp "$(CLASSPATH)" $(MAIN) \
+		-p "1|player1|ai-footmen-rush" \
+		-p "1|player2|ai-footmen-rush"
+
+ai: compile
+	$(JAVA) -cp "$(CLASSPATH)" $(MAIN) \
+		-p "1|player1|ai-footmen-rush" \
+		-p "1|player2|ai-archers-rush"
+
 
 clean:
-	rm -rf $(OUT)
-
-.PHONY: all compile keyboard seek run clean
+	rm -rf $(BUILD_DIR)
