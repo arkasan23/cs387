@@ -5,7 +5,7 @@ Author: Arsalan Riaz
 
 ## Video
 
-[Pathfinding Video](https://www.dropbox.com/scl/fi/om69ny097zopi5bjhanc5/recording_2026-08-28_22.54.04.mp4?rlkey=9e2yqsf1cmdl180rkvnmcuu1p&st=i0g8ogmk&dl=0)
+[Content Generation Video](https://www.dropbox.com/scl/fi/om69ny097zopi5bjhanc5/recording_2026-08-28_22.54.04.mp4?rlkey=9e2yqsf1cmdl180rkvnmcuu1p&st=i0g8ogmk&dl=0)
 
 ## Description
 
